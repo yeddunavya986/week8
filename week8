@@ -1,0 +1,136 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": []
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "PyG-1t62-UU_",
+        "outputId": "b0bfe2d2-4e79-45aa-93c5-bdcaf059e54c"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m143.7/143.7 kB\u001b[0m \u001b[31m1.2 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25h"
+          ]
+        }
+      ],
+      "source": [
+        "!pip install groq transformers -q"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from google.colab import userdata\n",
+        "from groq import Groq\n"
+      ],
+      "metadata": {
+        "id": "LmP0-TGX-hp9"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "api_key = userdata.get(\"GROQ_API_KEY\")\n",
+        "client = Groq(api_key=api_key)\n"
+      ],
+      "metadata": {
+        "id": "8KYk5pjK-ly0"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# Structured Format Prompt\n",
+        "\n",
+        "prompt = \"\"\"\n",
+        "List three benefits of daily exercise.\n",
+        "\n",
+        "Requirements:\n",
+        "1. First, give the answer as a bullet list.\n",
+        "2. Then create a Markdown table.\n",
+        "3. The table must have two columns:\n",
+        "   - Benefit\n",
+        "   - Description\n",
+        "\"\"\"\n",
+        "\n",
+        "response = client.chat.completions.create(\n",
+        "    model=\"llama-3.3-70b-versatile\",\n",
+        "    messages=[\n",
+        "        {\"role\": \"user\", \"content\": prompt}\n",
+        "    ]\n",
+        ")\n",
+        "\n",
+        "print(\"========== Prompt ==========\\n\")\n",
+        "print(prompt)\n",
+        "\n",
+        "print(\"\\n========== Output ==========\\n\")\n",
+        "print(response.choices[0].message.content)\n"
+      ],
+      "metadata": {
+        "id": "2ssXE6rn-vPL",
+        "outputId": "ec1949e2-1b54-4253-f0f8-20a3872e3f3d",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        }
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "========== Prompt ==========\n",
+            "\n",
+            "\n",
+            "List three benefits of daily exercise.\n",
+            "\n",
+            "Requirements:\n",
+            "1. First, give the answer as a bullet list.\n",
+            "2. Then create a Markdown table.\n",
+            "3. The table must have two columns:\n",
+            "   - Benefit\n",
+            "   - Description\n",
+            "\n",
+            "\n",
+            "========== Output ==========\n",
+            "\n",
+            "* Improved physical health\n",
+            "* Enhanced mental well-being\n",
+            "* Increased energy levels\n",
+            "\n",
+            "| Benefit | Description |\n",
+            "| --- | --- |\n",
+            "| Improved physical health | Regular exercise helps to strengthen muscles, boost cardiovascular health, and reduce the risk of chronic diseases. |\n",
+            "| Enhanced mental well-being | Daily exercise can reduce stress, improve mood, and even help alleviate symptoms of anxiety and depression. |\n",
+            "| Increased energy levels | Engaging in regular physical activity can increase energy levels, reduce fatigue, and improve overall physical function. |\n"
+          ]
+        }
+      ]
+    }
+  ]
+}
